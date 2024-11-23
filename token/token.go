@@ -23,3 +23,16 @@ const (
 	FUNCTION          = "FUNCTION"
 	LET               = "LET"
 )
+
+var keywords = map[string]TokenType{
+	"fn":  FUNCTION,
+	"let": LET,
+}
+
+func GetKeywordOrIdentifier(word string) TokenType {
+	if keyword, ok := keywords[word]; ok {
+		return keyword
+	}
+
+	return IDENTIFIER
+}
