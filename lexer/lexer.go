@@ -29,6 +29,14 @@ func (lexer *Lexer) readChar() {
 	lexer.readPosition += 1
 }
 
+func (lexer *Lexer) peekChar() byte {
+	if lexer.readPosition >= len(lexer.input) {
+		return 0
+	} else {
+		return lexer.input[lexer.readPosition]
+	}
+}
+
 func createToken(tokenType token.TokenType, char byte) token.Token {
 	if tokenType == token.EOF {
 		return token.Token{Type: token.EOF, Literal: ""}
@@ -77,7 +85,12 @@ func (lexer *Lexer) NextToken() token.Token {
 
 	switch lexer.currentChar {
 	case '=':
-		currentToken = createToken(token.ASSIGN, lexer.currentChar)
+		if lexer.peekChar() == '=' {
+			currentToken = token.Token{Type: token.EQUAL, Literal: "=="}
+			lexer.readChar()
+		} else {
+			currentToken = createToken(token.ASSIGN, lexer.currentChar)
+		}
 	case ';':
 		currentToken = createToken(token.SEMICOLON, lexer.currentChar)
 	case '(':
@@ -92,6 +105,23 @@ func (lexer *Lexer) NextToken() token.Token {
 		currentToken = createToken(token.LEFT_BRACE, lexer.currentChar)
 	case '}':
 		currentToken = createToken(token.RIGHT_BRACE, lexer.currentChar)
+	case '!':
+		if lexer.peekChar() == '=' {
+			currentToken = token.Token{Type: token.NOT_EQUAL, Literal: "!="}
+			lexer.readChar()
+		} else {
+			currentToken = createToken(token.BANG, lexer.currentChar)
+		}
+	case '-':
+		currentToken = createToken(token.MINUS, lexer.currentChar)
+	case '/':
+		currentToken = createToken(token.SLASH, lexer.currentChar)
+	case '*':
+		currentToken = createToken(token.ASTERISK, lexer.currentChar)
+	case '<':
+		currentToken = createToken(token.LOWER_THAN, lexer.currentChar)
+	case '>':
+		currentToken = createToken(token.GREATER_THAN, lexer.currentChar)
 	case 0:
 		currentToken = createToken(token.EOF, lexer.currentChar)
 	default:

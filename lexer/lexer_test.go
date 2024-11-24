@@ -15,7 +15,18 @@ let add = fn(x, y) {
 };
 
 let result = add(five, ten);
-	`
+!-/*5;
+5 < 10 >5;
+
+if (5 < 10) {
+       return true;
+   } else {
+       return false;
+}
+
+10 == 10; 
+10 != 9;
+`
 
 	expected := []struct {
 		expectedType    token.TokenType
@@ -57,6 +68,43 @@ let result = add(five, ten);
 		{token.IDENTIFIER, "ten"},
 		{token.RIGHT_PARENTHESIS, ")"},
 		{token.SEMICOLON, ";"},
+		{token.BANG, "!"},
+		{token.MINUS, "-"},
+		{token.SLASH, "/"},
+		{token.ASTERISK, "*"},
+		{token.INT, "5"},
+		{token.SEMICOLON, ";"},
+		{token.INT, "5"},
+		{token.LOWER_THAN, "<"},
+		{token.INT, "10"},
+		{token.GREATER_THAN, ">"},
+		{token.INT, "5"},
+		{token.SEMICOLON, ";"},
+		{token.IF, "if"},
+		{token.LEFT_PARENTHESIS, "("},
+		{token.INT, "5"},
+		{token.LOWER_THAN, "<"},
+		{token.INT, "10"},
+		{token.RIGHT_PARENTHESIS, ")"},
+		{token.LEFT_BRACE, "{"},
+		{token.RETURN, "return"},
+		{token.TRUE, "true"},
+		{token.SEMICOLON, ";"},
+		{token.RIGHT_BRACE, "}"},
+		{token.ELSE, "else"},
+		{token.LEFT_BRACE, "{"},
+		{token.RETURN, "return"},
+		{token.FALSE, "false"},
+		{token.SEMICOLON, ";"},
+		{token.RIGHT_BRACE, "}"},
+		{token.INT, "10"},
+		{token.EQUAL, "=="},
+		{token.INT, "10"},
+		{token.SEMICOLON, ";"},
+		{token.INT, "10"},
+		{token.NOT_EQUAL, "!="},
+		{token.INT, "9"},
+		{token.SEMICOLON, ";"},
 		{token.EOF, ""},
 	}
 
@@ -66,8 +114,8 @@ let result = add(five, ten);
 		token := lexer.NextToken()
 
 		if token.Type != expectedToken.expectedType {
-			t.Fatalf("expected[%d] - tokentType wrong. expected=%q, got=%q",
-				i, expectedToken.expectedType, token.Type)
+			t.Fatalf("expected[%d] - tokentType wrong. expected=%q, got=%q literal=%q",
+				i, expectedToken.expectedType, token.Type, token.Literal)
 		}
 
 		if token.Literal != expectedToken.expectedLiteral {
